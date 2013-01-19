@@ -1,0 +1,3 @@
+000I don't understand.
+001You cannot do that.
+002You cannot go that way.

@@ -1,0 +1,18 @@
+// Title
+\\                888b     d888          \                8888b   d8888          \                88888b.d88888          \                888Y88888P888 888d888  \                888 Y888P 888 888P"    \                888  Y8P  888 888      \       8888888  888   "   888 888  d8b                            888    \         888    888       888 888  Y8P                            888    \         888                                                      888    \         888   .d88b.  88888b.   .d88b.  888d888 8888b.  88888b.  888888 \         888  d88P"88b 888 "88b d88""88b 888P"      "88b 888 "88b 888    \         888  888  888 888  888 888  888 888    .d888888 888  888 888    \         888  Y88b 888 888  888 Y88..88P 888    888  888 888  888 Y88b.  \       8888888 "Y88888 888  888  "Y88P"  888    "Y888888 888  888  "Y888 \                   888                                                   \              Y8b d88P                                                   \               "Y88P"   
+// Instructions Prompt
+Would you like instructions? (Y/N)
+// Instructions (Add a {P} to the end of it.)
+INSTRUCTIONS: This interactive fiction follows relatively close in the\              footsteps of other text adventures. When prompted to tell the\              game what you want to do next, you must respond with an action\              verb, as well as an object depending on your desired action.\              Examples of valid commands are EXAMINE KEY or OPEN DOOR or\              READ SIGN. To specify the object more closely, you may use\              adjectives or prepositions to describe it, such as: TAKE THE\              RED CLOTH or BREAK WINDOW WITH AXE.\              ---\              To navigate to different rooms, use the cardinal directions\              NORTH, SOUTH, EAST, WEST (or N, E, S, W), NE, SE, NW, SW, UP or\              U, and DOWN or D. You can check your inventory of items at any\              time by entering INVENTORY, INV, or I. In this particular game,\              you can access your character's thoughts by entering THOUGHTS as\              a refresher for your current goal. Purple triangles serve as\              save points where you can SAVE your game. You can only save in\              a room that contains such a triangle. To view these instructions\              again, type HELP at any time.\              ---\              Good luck!\              (Press any key to continue){P}
+// Prelude
+{C}You are Mr. Ignorant. Everyone with whom you have acquainted qualifies your tremendous lack of poise, dignity, and common sense. Your reputation writhes with the solemn disparaging judgements distilled by your peers. Your own incompetence abandons you in the ravaged tracks of those surpassing you in all conceivable realms of intelligence. To put it simply, you aren't the brightest bulb in the box, but that does not stop you from seeking out a higher disposition. Every night you dream of endless riches, fame, and acceptance, and every morning you sense your day of triumph approaching even closer to frutition. For too long, your impatience has warranted an utmost need to take action.\\Today, you set out on a mission to make this day happen. Today, you will discard your cretinism and prove to everyone that your years of incessant ignorance have come to an end. Of course, the prospect of such a feat has left you doubtful of where to start. So, you begin at the most logical location, a place you have neglected for quite some time: outside.{P}
+// Starting Room ID
+000
+// Keyword filter
+the/an/a/of/at/
+// Prepositions
+on/over/under/between/beside/along/with/in/at/and/
+// Inventory
+You are currently carrying:
+// Inventory (blank)
+You aren't carrying anything.

@@ -1,0 +1,33 @@
+// Extra commands:
+// quit; = Exit the scenario and allow normal command recognition to resume
+// qcmd; = Exit the scenario and recognize the given command using the regular procedure
+// Notes:
+// - Scripts must begin with a @
+// - All recognized commands must match at the beginning of the user input
+// - {G} indicates global commands which can be triggered during any stage of the scenario
+// - {#} declares a new stage ID. All scenarios when activated begin at {0}
+
+[0000]
+
+{G}
+????:@qcmd;
+
+{0}With what, your bare hands?
+YES:@ivar[1];addo[8];addo[9];remo[1];remo[2];stat[0,1];prnt[You break the window with your bare hands. Shattered glass scatters onto the floor of your living room. Blood rushes down your arm from deep lacerations on your fist. You are in incredible pain, but at least you can now ENTER your house.];quit;
+NO:@goto[1];
+
+{1}Then with what?
+BARE+HANDS,HANDS:@ivar[1];addo[8];addo[9];remo[1];remo[2];stat[0,1];prnt[You break the window with your bare hands. Shattered glass scatters onto the floor of your living room. Blood rushes down your arm from deep lacerations on your fist. You are in incredible pain, but at least you can now ENTER your house.];quit;
+
+[00001]
+
+{G}
+????:I beg your pardon?
+BYE,GOODBYE:@prnt[See you later.];quit;
+
+{0}Hello!
+HI:@goto[1];
+
+{1}How are you?
+FINE:@goto[2];
+NOT+GOOD:@goto[3];

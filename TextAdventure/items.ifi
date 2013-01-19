@@ -1,0 +1,366 @@
+// Syntax:
+// [(ROOMID)(ITEMID)] keywords
+// COMMAND:Your text here.
+// AAAA:{ID} <- Reference to standard text list
+// #dsc:An object. <- Description of an item in the inventory
+// #fnd:An object is lying here. <- What is printed when entering a room with an object (Items)
+// #fol:An object is following you. <- What is printed every time a room is entered
+// #mlp: <- Item will be displayed with its count in the inventory: - Gold (125)
+
+// Script Commands: (Also works with rooms)
+// Use ; to separate. Always terminate with a ;
+// prnt[Your text here.]; - Print something on the window
+// addo[ID]; - Adds an object to the room; optional: addo[ID,AMT]
+// addi[ID]; - Add an object to the inventory
+// addf[ID]; - Add an object to follow list
+// remo[ID]; - Removes an object from the room
+// remi[ID]; - Remove object from inventory
+// remf[ID]; - Remove object from follow list
+// stor[ID,NEWID]; - Removes ID from room; adds NEWID to inventory
+// drop[ID,NEWID]; - Removes ID from inventory; Adds NEWID to room
+// rsto[ID, ROO]; - Allow ID previously stored from ROO to be picked up again
+// stat[ROO,ST]; - Sets room ROO to state ST
+// move[ROO]; - Sets current room to ROO
+// visi[ROO,V]; - Sets room ROO to either visited (1) or not visited (0)
+// svar[VAR,VAL]; - Sets in-game variable id VAR to VAL. VAR can range from 0 - 14
+// ivar[VAR]; - Increments variable VAR by 1
+// dvar[VAR]; - Decrements variable VAR by 1
+// stop[]; - Stop reading script entirely
+// endg[]; - End the game
+
+// Conditionals:
+// ?aaa[##]{bbbb[##]}else{cccc[##]}; - If aaa is true, execute bbbb, else execute cccc
+// ?aaa[##]{bbbb[##]};?ccc{dddd[##]}; - If aaa is true, execute bbbb. If ccc is true, execute dddd
+// !aaa[##]{bbbb[##]}else{cccc[##]}; - If aaa is NOT true, execute bbbb, else if true execute cccc
+// ?exo[ID] - If object exists in room
+// ?exi[ID] - If object is in inventory
+// ?exf[ID] - If object is following
+// ?roo[ID] - If current room is ID
+// ?vis[ROO,V] - If room ROO is visited (1) or not (0)
+// ?sta[ROO,ST] - If room ROO has state ST
+// ?rem[ID,ROO] - If ID was not already picked up in ROO
+// ?var[VAR,VAL] - If variable VAR is equal to VAL
+
+// Notes:
+// Use EXLK for EXAM and LOOK to print the same line
+// To do AND, use: ?aaa[##]{?bbb[##]{...}}; To do OR, use: ?aaa[##]{bbbb[##]};?ccc{bbbb[##]};
+// &o = object that was typed in
+// &a = amount added
+// &t = amount taken
+// &v# = value of variable #
+// +## - Add/Subtract to current room ID
+// +# - Add/Subtract to [current] room state
+
+// Command given w/o an object
+[DFNUL] 
+EXLK:@visi[+00,0];move[+00];
+TAKE:What do you want to take?
+USE:What do you want to use?
+DROP:What do you want to drop?
+READ:Is there something here you want to read?
+DIG:What do you want to dig?
+EAT:What will you eat?
+DRINK:What will you drink?
+FIX:What will you fix?
+SAVE:To be implemented later.
+LOAD:To be implemented later.
+PICK UP:TAKE is a better command.
+HELP:You shout at the top of your lungs, "HELP!" But you heed no response.
+LEAVE:What will you leave?
+XYZZY:Curiously, nothing happens.
+????:{000}
+
+// Command given w/ a non-present/inexistent object
+[DFOBJ] 
+// Putting EXAMINE or LOOK here will do nothing; use EXLK instead
+EXLK:There doesn't seem to be any &o here.
+TAKE:There doesn't seem to be any &o for taking.
+USE:You can't use that in any conspicuous way.
+DROP:You don't have any &o to drop.
+READ:Nothing to be read there.
+DIG:@?exi[90000]{prnt[You prefer not to try that.];}else{prnt[That is impossible.];};
+PICK UP:TAKE is a better command.
+EAT:You cannot eat that.
+DRINK:You cannot drink that.
+TALK:You can't talk to that.
+FIX:You cannot fix that.
+ENTER:You cannot enter that.
+OPEN:There is no &o to open here.
+START:You cannot start that.
+????:{000}
+
+[D00] around everything
+EXLK:@visi[+00,0];move[+00];
+
+[D01] i
+WHO AM:You are Mr. Ignorant.
+
+[D02] car keys
+WHERE ARE:You probably left them in your house.
+
+// Room 00: Front Lawn
+
+[00001] home house facade &crumbling &my
+EXLK:The outer walls of your home are riddled with cracks, paint chips, and dirt. A single WINDOW lies adjacent to your FRONT DOOR.
+ENTER:You should try to open your FRONT DOOR.
+
+[00002] window glass
+EXLK:The window is shut and locked from the inside. Its frame is surprisingly in good condition.
+OPEN:It's locked from the inside.
+UNLOCK:How do you plan to do that from here?
+BREAK:@scen[0];
+KICK:The window is far too high off of the ground to kick.
+
+[00003] door &front
+#dsc:front door
+EXLK:Hardly functional, but enough to keep the burglars out. That is, if any burglars would even want to bother with this pitiful home.
+OPEN:It's locked, and you forgot your house keys inside.
+BREAK:Perhaps you should kick it instead.
+KICK:You gather your strength and apply a gruesome blow to the door with the heel of your shoe. Sadly, your frail legs are not strong enough to sustain the impact, and you curl into a ball on the floor holding your foot in agony and wail for the next three minutes.
+
+[00002] tree
+EXLK:Its tall trunk supports a shady, swaying canopy that provides ocular comfort from the blinding sun.
+TAKE:The tree is planted firmly in the ground. You've tried this many times before to no avail.
+
+[00003] grass weeds
+EXLK:Blades of dying glass and dandelions crowd the lawn and cling to your bare legs.
+CUT:No time for that now.
+
+[00004] driveway
+EXLK:A resting spot for your Volvo. Blotches of oil tarnish the surface of the concrete.
+
+[00005] car volvo &my
+EXLK:A measly piece of machinery, but it works well enough.
+ENTER:@?exo[7]{move[1];}else{prnt[You should open the CAR DOOR first.];};
+
+[00006] door &car
+#dsc:car door
+EXLK:Dents, holes and bird guano tesselate the surface of the door. It is currently closed.
+OPEN:@addo[7];remo[6];svar[5,1];prnt[You open the door to the car. Luckily, you left the doors unlocked. You can now ENTER the car.];
+CLOSE:It is already closed.
+
+[00007] door &car
+EXLK:Dents, holes and bird guano tesselate the surface of the door. It is currently open.
+OPEN:It is already open.
+CLOSE:@addo[6];remo[7];svar[5,0];prnt[You close the car door.];
+
+[00008] window glass &broken
+EXLK:The window is no longer. Shards of broken glass sport traces of blood from the ordeal.
+TAKE:Perhaps if you had a death wish or a grudge, but neither of those are pertinent in your intentions.
+FIX:Good luck with that.
+ENTER:@move[4];
+
+[00009] home house facade &crumbling &my
+EXLK:The outer walls of your home are riddled with cracks, paint chips, and dirt. A broken WINDOW lies adjacent to your FRONT DOOR.
+ENTER:@move[4];
+
+// Room 01: Car
+
+[00101] car
+EXLK:The car is currently shut off. You should try to START it.
+LEAVE:@move[0];
+START:You forgot your car keys.
+TURN ON:You forgot your car keys.
+TURN OFF:The car is already off.
+
+[00102] seat
+EXLK:Comfortable, but slightly moist. The seats could use a thorough cleaning.
+
+[00103] ignition
+EXLK:A perfect fit for your car keys.
+START:You forgot your car keys.
+TURN ON:You forgot your car keys.
+TURN OFF:The car is already off.
+
+// Room 02: Backyard
+
+[00201] house home &my
+EXLK:Unattractive, even from this angle. A single boarded off DOOR embellishes the back side.
+
+[00202] door &boarded
+EXLK:Boarded off and damaged beyond repair. Still keeps the raccoons out, though.
+OPEN:That's not going to happen.
+
+[00203] gate
+EXLK:Wooden and wrought with termite holes. It's currently open, leading SOUTH to your front yard.
+OPEN:The gate is already open.
+CLOSE:@addo[204];remo[203];stat[2,1];prnt[You close the gate behind you.];
+
+[00204] gate
+EXLK:Wooden and wrought with termite holes. It's currently closed.
+OPEN:@addo[203];remo[204];stat[2,0];prnt[You open the gate behind you.];
+CLOSE:The gate is already closed.
+
+[00205] biscuit
+#fnd:A small BISCUIT lies on the ground.
+EXLK:Fresh and delicious. You can TAKE this biscuit, and should before it rots.
+TAKE:@stor[205,90000];prnt[You place the buscuit in your inventory.];
+EAT:You should TAKE the biscuit first.
+
+// Room 03: Jim's House (Outside)
+
+[00301] house home &jim &jims
+EXLK:Freshly painted, and sporting a green door and black shingled roof.
+ENTER:That would not be the best idea. Jim is still angry at you about something, most likely for entering his house without his permission.
+
+[00302] hedges
+EXLK:Two rows of bright, lively hedges align the walkway toward Jim's front door.
+[00303] mailbox
+EXLK:Just like in the cartoons.
+OPEN:The mailbox is empty.
+
+[00304] dog &cute
+#fnd:A medium-sized DOG rests on the lawn.
+EXLK:The dog sits patiently and panting before your feet. Its face is so adorable that you feel compelled to PET it.
+TAKE:That would be stealing, and borderline animal cruelty.
+KICK:This did not go well last time, especially in a court of law.
+PET:@addf[80000];remo[304];prnt[You kneel down to pet the dog. After a while, the dog rises and lets out a jovial bark. It gazes at you intently.];
+
+// Room 04: Your House, Living Room
+
+[00401] house home
+EXLK:A bit dusty and musty, but a home is still a home.
+LEAVE:@move[0];
+
+[00401] door
+EXLK:Your front door
+OPEN:Why do that when you have a conveniently forced entrance through your window?
+
+[00402] window glass
+EXLK:Countless shards of glass rest under the broken window. This will surely cost a fortune to repair.
+ENTER:@move[0];
+
+[00403] table
+EXLK:@?exo[405]{prnt[A mahogany table interrupts the void that is your living room. A BASKET lies on top of it. Under the table rests your CAR KEYS.];}else{prnt[A mahogany table interrupts the void that is your living room. A BASKET lies on top of it.];};
+MOVE:You reposition the table to several areas of the room, but the center most satisfies your liking.
+
+[00404] basket
+EXLK:@?exo[406]{prnt[Wicker and ornate. You bought the basket from a garage sale down the street. Inside the basket are your HOUSE KEYS.];}else{prnt[Wicker and ornate. You bought the basket from a garage sale down the street.];};
+TAKE:You prefer to leave the basket on the table.
+
+[00405] keys &car @under &table
+#dsc:car keys
+#fnd:@?roo[4]{prnt[Your CAR KEYS are resting under the table.];}else{prnt[Your CAR KEYS are here.];};
+EXLK:These are the keys to your Volvo.
+TAKE:@stor[405,90001];prnt[You place the car keys in your inventory.];
+
+[00406] keys &house @in &basket
+#dsc:house keys
+#fnd:@?roo[4]{prnt[Your HOUSE KEYS are in the basket.];}else{prnt[Your HOUSE KEYS are here.];};
+EXLK:These are the keys to your house.
+TAKE:@stor[406,90002];prnt[You place the house keys in your inventory.];
+
+// Room 05: Your House, Kitchen
+
+[00501] stove gas leak
+EXLK:Natural gas eminates from the stove at the far side of the kitchen. You dare not touch the stove ever since that disastrous cooking accident.
+FIX:You should leave that to a professional.
+
+[00502] matchbox matches match
+EXLK:You do not know where these came from, honestly.
+TAKE:@stor[502,90003];prnt[You place the matchbox in your inventory.];
+LIGHT:You should take the MATCHBOX first.
+
+// Inventory Items
+
+[90000] biscuit @with
+#prs
+#inv:A small biscuit
+EXLK:Fresh and delicious.
+DROP:@drop[90000,205];prnt[You place the biscuit on the ground.];
+EAT:On further inspection, it seems the biscuit has already begun to grow moss.
+USE:How will you use the biscuit?
+FEED:@_
+		?exf[80000]{_
+			?cmd[with]{_
+				?cmd[dog]{_
+					remf[80000];remi[90000];ivar[1];_
+					prnt[You give the dog the biscuit from your pocket. In an istant, the dog scurries off into the distance to enjoy its meal.];_
+				}_
+				else{_
+					prnt[You cannot feed the dog with that.];_
+				};_
+			}_
+			else{_
+				prnt[What will you feed the dog with?];_
+			};_
+		}_
+		else{_
+			prnt[You need something to receive this biscuit.];_
+		};
+GIVE:Who will you give the biscuit to?
+
+[90001] keys &car
+#dsc:car keys
+#inv:Car keys
+EXLK:These keys should work nicely with your Volvo.
+USE:You cannot use these here.
+DROP:@drop[90001,405];prnt[You discard your car keys.];
+
+[90002] keys &house
+#dsc:house keys
+#inv:House keys
+EXLK:The keys are kind of useless now, since your window is now your new door.
+USE:No point in that.
+DROP:@drop[90002,406];prnt[You discard your house keys.];
+
+[90003] matchbox matches match
+#inv:A box of matches
+EXLK:There is only one logical thing to do in this scenario.
+USE:How will you use the matches?
+DROP:@drop[90003,502];prnt[You discard the matchbox here.];
+LIGHT:@?roo[5]{_
+		prnt[The air surrounding your lit match ignites in a fury of monstrous flame. Your house and your entire self are cast into a fiery oblivion.\\GAME OVER! Your score is: &v1\];endg;_
+	}_
+	else{_
+		prnt[You light one of the matches in the box. You stand gazing at the miniscule flame in delight until it fades away.];_
+	};
+
+// Followers
+
+[80000] dog @to
+#prs
+#fol:@?var[8,8]{_
+		prnt[\Before you can react, the dog pummels you to the ground and tears your face clean off of your skull. Perhaps there was something you could have done to distract it. Then again, you were never too good with animals.\\GAME OVER! Your score is: &v1\];endg;_
+	}_
+	else{_
+		prnt[The dog follows closely behind you.];ivar[8];_
+	};
+EXLK:You could be mistaken, but the dog appears to be salivating.
+GIVE:@_
+		?exi[90000]{_
+			?cmd[to]{_
+				?cmd[biscuit]{_
+					remf[80000];remi[90000];ivar[1];_
+					prnt[You give the dog the biscuit from your pocket. In an istant, the dog scurries off into the distance to enjoy its meal.];_
+				}_
+				else{_
+					prnt[You cannot feed the dog with that.];_
+				};_
+			}_
+			else{_
+				prnt[What will you feed the dog with?];_
+			};_
+		}_
+		else{_
+			prnt[You need something to feed the dog.];_
+		};
+FEED:@_
+		?exi[90000]{_
+			?cmd[to]{_
+				?cmd[biscuit]{_
+					remf[80000];remi[90000];ivar[1];_
+					prnt[You give the dog the biscuit from your pocket. In an istant, the dog scurries off into the distance to enjoy its meal.];_
+				}_
+				else{_
+					prnt[You cannot feed the dog with that.];_
+				};_
+			}_
+			else{_
+				prnt[What will you feed the dog with?];_
+			};_
+		}_
+		else{_
+			prnt[You need something to feed the dog.];_
+		};
+PET:The dog seems satisfied enough.

@@ -1,0 +1,77 @@
+// Syntax:
+// [Room ID]/[State]/[Sub]Your text here.\Next line. (Max per line: 80)
+// Subs:
+// ###/##/0 = Long description
+// ###/##/1 = Short description (Revisit)
+// ###/##/[N/S/E/W/U/D] = Room ID destination to navigate
+// ###/##/[n/s/e/w] = n=Northeast, s=Northwest, c=Southeast, w=Southwest
+// ###/##/C = For any undefined normal direction [N/S/E/W]
+// ###/##/c = For any undefined diagonal [n/s/e/w]
+// ###/##/V = For both [U/D] if both are undefined
+// ###/##/? = For any other undefined direction
+// ###/##/x = Script <-Add objects with this
+// Extra:
+// {###} <- Reference to standard text list
+// Descriptions create statuses. Scripts and navigation do not.
+//    The latter two will derive from previous statuses if not
+//    defined for any later statuses. For descriptions, use
+//    [State #] to refer to a previous state.
+// ROOMS MUST BE PUT IN ORDER AND TOGETHER!
+
+// Room 00: Front Lawn
+000\00\0:You are standing on your front lawn. A single TREE stands amidst the brown, unkempt GRASS and patches of WEEDS that smother the facade of your crumbling HOME. A passage to the left of the house leads NORTH into your backyard. To the EAST lives your disgruntled neighbor Jim. Your VOLVO is parked crooked in the driveway.
+000\00\1:You return to your front yard.
+000\00\x:@addo[1];addo[2];addo[3];addo[4];addo[5];?var[5,0]{addo[6];}else{addo[7];};
+000\01\0:[0]
+000\01\1:[0]
+000\01\x:@addo[9];addo[8];addo[3];addo[4];addo[5];?var[5,0]{addo[6];}else{addo[7];};
+000\00\N:[002]
+000\00\E:[003]
+000\00\V:{001}
+000\00\?:{002}
+
+// Room 01: Car
+001\00\0:You step into the front SEAT of your CAR. The leather material reeks of coffee spills and perspiration. The IGNITION is turned off.
+001\00\1:You are inside your car.
+001\00\x:@addo[101];addo[102];addo[103];
+001\00\N:[000]
+000\00\V:{001}
+000\00\?:{002}
+
+// Room 02: Backyard
+002\00\0:You arrive at your backyard. The back DOOR to your HOUSE is boarded off due to neglected repairs. The GATE behid you has been left open, and leads SOUTH to your front yard.
+002\00\1:You step into your backyard.
+002\00\x:@addo[201];addo[202];addo[203];?rem[2,205]{addo[205];};
+002\01\0:You arrive at your backyard. The back DOOR to your HOUSE is boarded off due to neglected repairs. The GATE behind you is shut.
+002\01\1:[0]
+002\01\x:@addo[201];addo[202];addo[204];?rem[2,205]{addo[205];};
+002\00\S:[000]
+002\01\S:The closed gate behind you impedes your return.
+002\00\V:{001}
+002\00\?:{002}
+
+// Room 03: Jim's House (Outside)
+003\00\0:You stop before the walkway leading to Jim's HOUSE. Large oval HEDGES flank the concrete walkway. A traditional standing MAILBOX lies offset to the left. Your house lies to the WEST.
+003\00\1:You return to Jim's house.
+003\00\x:@addo[301];addo[302];addo[303];addo[304];
+003\01\x:@addo[301];addo[302];addo[303];
+003\00\W:[000]
+003\00\V:{001}
+003\00\?:{002}
+
+// Room 04: Your House, Living Room
+004\00\0:You stumble into your living room. The bank claimed most of your furniture due to unpaid loans. All that remains is a TABLE and a small BASKET resting on top of it. The kitchen lies to the WEST side of your house, and your front yard is to the SOUTH through the broken WINDOW.
+004\00\1:You enter your living room.
+004\00\x:@addo[401];addo[402];addo[403];addo[404];?rem[4,405]{addo[405];};?rem[4,406]{addo[406];};
+004\00\W:[005]
+004\00\S:[000]
+004\00\V:{001}
+004\00\?:{002}
+
+// Room 05: Your House, Kitchen
+005\00\0:You step into your small, compact kitchen. The surrounding air is saturated with the scent of gas, most likely due to a leak from the half-century old STOVE that you forgot to have fixed. A used MATCHBOX lies on the counter next to the stove. Your living room lies to the EAST from here.
+005\00\1:You return to the kitchen.
+005\00\x:@addo[501];?rem[502]{addo[502];};
+005\00\E:[004]
+005\00\V:{001}
+005\00\?:{002}
